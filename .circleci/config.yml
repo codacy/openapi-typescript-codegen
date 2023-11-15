@@ -1,32 +1,87 @@
-version: 2
+version: 2.1
+
+orbs:
+  codacy: codacy/base@7.0.0
+
+references:
+  release_filter: &release_filter
+    filters:
+      branches:
+        only:
+          - master
+
+
 jobs:
-  build:
+  build_package:
     docker:
-      - image: cimg/node:lts-browsers
-    resource_class: large
-    working_directory: ~/repo
+      - image: cimg/node:14.21
+    working_directory: ~/workdir
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
-            - v1-dependencies-
+      - attach_workspace:
+          at: ~/workdir
       - run:
-          name: Install dependencies
-          command: npm install
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
+          name: Check current version of node and npm
+          command: |
+            node -v
+            npm -v
+      - run:
+          name: Install dependencies and generate
+          command: |
+            npm install
       - run:
           name: Build library
-          command: npm run release
+          command: |
+            npm run release
       - run:
-          name: Run unit tests
+          name: Run tests
           command: npm run test
-#      - run:
-#          name: Run e2e tests
-#          command: npm run test:e2e
+      - persist_to_workspace:
+          root: ~/workdir
+          paths:
+            - bin/
+            - dist/
+            - node_modules/
+
+  publish_packages:
+    docker:
+      - image: cimg/node:14.21
+    working_directory: ~/workdir
+    steps:
+      - attach_workspace:
+          at: ~/workdir
       - run:
-         name: Submit to Codecov
-         command: npm run codecov
+          name: Setup npm credentials
+          command: |
+            npm config set @codacy:registry https://registry.npmjs.org/
+            npm config set _authToken $NPM_TOKEN
+            npm config set access public
+            npm config set save-exact true
+      - run:
+          name: Publish packages
+          command: |
+            # Update version in packages to publish
+            npm version --no-git-tag-version --no-commit-hooks "$(cat .version)"
+            # Publish package versions to npmjs.org
+            if [ "$CIRCLE_BRANCH" = "master" ]; then
+              npm publish
+            else
+              npm publish --tag unstable
+            fi
+
+workflows:
+  compile_deploy:
+    jobs:
+      - codacy/checkout_and_version
+      - build_package:
+          requires:
+            - codacy/checkout_and_version
+      - codacy/tag_version:
+          name: tag_version
+          context: CodacyAWS
+          requires:
+            - build_package
+      - publish_packages:
+          <<: *release_filter
+          requires:
+            - tag_version
+          context: CodacyNPM

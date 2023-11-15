@@ -10,6 +10,7 @@ junit.xml
 *.iml
 dist
 coverage
+generated
 test/generated
 test/e2e/generated
 samples/generated
