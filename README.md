@@ -1,3 +1,5 @@
+Forked from [openapi-typescript-codegen](https://github.com/ferdikoomen/openapi-typescript-codegen)
+
 # OpenAPI Typescript Codegen
 
 [![NPM][npm-image]][npm-url]
