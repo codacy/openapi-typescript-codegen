@@ -53,7 +53,7 @@ jobs:
           name: Setup npm credentials
           command: |
             npm config set @codacy:registry https://registry.npmjs.org/
-            npm config set _authToken $NPM_TOKEN
+            npm config set npmAuthToken $NPM_TOKEN
             npm config set access public
             npm config set save-exact true
       - run:
