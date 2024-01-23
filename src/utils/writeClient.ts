@@ -39,6 +39,7 @@ export const writeClient = async (
     output: string,
     httpClient: HttpClient,
     useOptions: boolean,
+    splitParameters: boolean,
     useUnionTypes: boolean,
     exportCore: boolean,
     exportServices: boolean,
@@ -76,6 +77,7 @@ export const writeClient = async (
             httpClient,
             useUnionTypes,
             useOptions,
+            splitParameters,
             indent,
             postfixServices,
             clientName

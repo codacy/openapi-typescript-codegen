@@ -59,49 +59,26 @@ $ openapi --help
     $ openapi --input ./spec.json --output ./generated --client xhr
 ```
 
-## Docker usage
+## Documentation
 
-To build the Docker container, execute the following command:
 
-```
-docker build . --tag openapi-typescript-codegen
-```
+The main documentation can be found in the [openapi-typescript-codegen/wiki](https://github.com/ferdikoomen/openapi-typescript-codegen/wiki)
 
-After this is done, you can execute the CLI commands:
+## Sponsors
 
-```
-docker run openapi-typescript-codegen --help
-docker run openapi-typescript-codegen --input sample.yaml --output client
-```
 
-Documentation
-===
-- [Basic usage](docs/basic-usage.md)
-- [OpenAPI object](docs/openapi-object.md)
-- [Client instances](docs/client-instances.md) `--name`
-- [Argument vs. Object style](docs/arguments-vs-object-style.md) `--useOptions`
-- [Enums vs. Union types](docs/enum-vs-union-types.md) `--useUnionTypes`
-- [Runtime schemas](docs/runtime-schemas.md) `--exportSchemas`
-- [Enum with custom names and descriptions](docs/custom-enums.md)
-- [Nullable props (OpenAPI v2)](docs/nullable-props.md)
-- [Authorization](docs/authorization.md)
-- [External references](docs/external-references.md)
-- [Canceling requests](docs/canceling-requests.md)
-- [Custom request file](docs/custom-request-file.md)
+If you or your company use the OpenAPI Typescript Codegen, please consider supporting me. By sponsoring I can free up time to give this project some love! Details can be found here: https://github.com/sponsors/ferdikoomen
 
-Support
-===
-- [Babel support](docs/babel-support.md)
-- [Axios support](docs/axios-support.md)
-- [Angular support](docs/angular-support.md)
-- [Node-Fetch support](docs/node-fetch-support.md)
+If you're from an enterprise looking for a fully managed SDK generation, please consider our sponsor:
+
+<a href="https://speakeasyapi.dev/?utm_source=ferdi+repo&utm_medium=github+sponsorship">
+    <img alt="speakeasy" src="https://storage.googleapis.com/speakeasy-design-assets/ferdi-sponsorship.png" width="640"/>
+</a>
 
 [npm-url]: https://npmjs.org/package/openapi-typescript-codegen
 [npm-image]: https://img.shields.io/npm/v/openapi-typescript-codegen.svg
 [license-url]: LICENSE
 [license-image]: http://img.shields.io/npm/l/openapi-typescript-codegen.svg
-[coverage-url]: https://codecov.io/gh/ferdikoomen/openapi-typescript-codegen
-[coverage-image]: https://img.shields.io/codecov/c/github/ferdikoomen/openapi-typescript-codegen.svg
 [downloads-url]: http://npm-stat.com/charts.html?package=openapi-typescript-codegen
 [downloads-image]: http://img.shields.io/npm/dm/openapi-typescript-codegen.svg
 [build-url]: https://circleci.com/gh/ferdikoomen/openapi-typescript-codegen/tree/master

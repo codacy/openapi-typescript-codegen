@@ -9,20 +9,59 @@
 {{#ifdef description deprecated}}
 /**
 {{#if description}}
- * {{{escapeComment description}}}
+* {{{escapeComment description}}}
 {{/if}}
 {{#if deprecated}}
- * @deprecated
+* @deprecated
 {{/if}}
- */
+*/
 {{/ifdef}}
 {{{name}}}{{>isRequired}}: {{>type}},
 {{/each}}
 }
 {{~else}}
-
+{{#if @root.splitParameters~}}
+{{#each parameters}}
+{{#equals in 'path'}}
+{{{name}}}{{>isRequired}}: {{>type}}{{#if default}} = {{{default}}}{{/if}},
+{{/equals}}
+{{/each}}
+{
+{{#each parameters}}
+{{#notEquals in 'path'}}
+{{{name}}}{{#if default}} = {{{default}}}{{/if}},
+{{/notEquals}}
+{{/each}}
+abortSignal,
+}: {
+{{#each parameters}}
+{{#notEquals in 'path'}}
+{{#ifdef description deprecated}}
+/**
+{{#if description}}
+* {{{escapeComment description}}}
+{{/if}}
+{{#if deprecated}}
+* @deprecated
+{{/if}}
+*/
+{{/ifdef}}
+{{{name}}}{{>isRequired}}: {{>type}},
+{{/notEquals}}
+{{/each}}
+abortSignal?: AbortSignal
+}
+{{~else}}
 {{#each parameters}}
 {{{name}}}{{>isRequired}}: {{>type}}{{#if default}} = {{{default}}}{{/if}},
 {{/each}}
+abortSignal?: AbortSignal
+{{/if}}
+{{/if}}
+{{~else}}
+{{#if @root.useOptions}}{ abortSignal }: { abortSignal?: AbortSignal }{{~else}}
+{{#if @root.splitParameters}}{ abortSignal }: { abortSignal?: AbortSignal }{{~else}}
+abortSignal?: AbortSignal
+{{/if}}
 {{/if}}
 {{/if}}

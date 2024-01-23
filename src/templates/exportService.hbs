@@ -61,7 +61,13 @@ export class {{{name}}}{{{@root.postfix}}} {
 	{{#unless @root.useOptions}}
 	{{#if parameters}}
 	{{#each parameters}}
-	 * @param {{{name}}} {{#if description}}{{{escapeComment description}}}{{/if}}
+		{{#if @root.splitParameters~}}
+		{{#equals in 'path'}}
+	 	* @param {{{name}}} {{#if description}}{{{escapeComment description}}}{{/if}}
+		{{/equals}}
+		{{~else~}}
+	 	* @param {{{name}}} {{#if description}}{{{escapeComment description}}}{{/if}}
+		{{~/if~}}
 	{{/each}}
 	{{/if}}
 	{{/unless}}
@@ -117,6 +123,7 @@ export class {{{name}}}{{{@root.postfix}}} {
 				{{/each}}
 			},
 			{{/if}}
+			abortSignal,
 			{{#if parametersForm}}
 			formData: {
 				{{#each parametersForm}}
