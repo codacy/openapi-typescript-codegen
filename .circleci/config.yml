@@ -14,7 +14,7 @@ references:
 jobs:
   build_package:
     docker:
-      - image: cimg/node:14.21
+      - image: cimg/node:20.8
     working_directory: ~/workdir
     steps:
       - attach_workspace:
@@ -44,7 +44,7 @@ jobs:
 
   publish_packages:
     docker:
-      - image: cimg/node:14.21
+      - image: cimg/node:20.8
     working_directory: ~/workdir
     steps:
       - attach_workspace:
