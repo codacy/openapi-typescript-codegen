@@ -8,11 +8,13 @@ export const sendRequest = async (
 ): Promise<Response> => {
 	const controller = new AbortController();
 
+	const combinedSignal = AbortSignal.any(controller.signal, options.abortSignal);
+
 	const request: RequestInit = {
 		headers,
 		method: options.method,
 		body: body ?? formData,
-		signal: controller.signal as AbortSignal,
+		signal: combinedSignal as AbortSignal,
 	};
 
 	onCancel(() => controller.abort());
