@@ -1583,7 +1583,6 @@ definitions:
       - fileId
       - patternInfo
       - toolInfo
-      - pattern
       - lineNumber
       - message
       - language
@@ -1673,7 +1672,6 @@ definitions:
       - filePath
       - patternInfo
       - toolInfo
-      - pattern
       - message
       - language
       - lineText
