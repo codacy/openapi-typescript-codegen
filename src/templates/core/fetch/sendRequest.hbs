@@ -9,13 +9,11 @@ export const sendRequest = async (
 ): Promise<Response> => {
 	const controller = new AbortController();
 
-	const combinedSignal = AbortSignal.any(controller.signal, options.abortSignal);
-
 	const request: RequestInit = {
 		headers,
 		body: body ?? formData,
 		method: options.method,
-		signal: combinedSignal,
+		signal: options.abortSignal ?? controller.signal,
 	};
 
 	if (config.WITH_CREDENTIALS) {
