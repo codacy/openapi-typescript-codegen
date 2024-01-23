@@ -19,7 +19,6 @@
         "fetch",
         "xhr",
         "axios",
-        "angular",
         "node"
     ],
     "main": "dist/index.js",
@@ -47,8 +46,6 @@
         "eslint": "eslint .",
         "eslint:fix": "eslint . --fix",
         "prepare": "npm run clean && npm run release",
-        "codecov": "codecov --token=66c30c23-8954-4892-bef9-fbaed0a2e42b",
-        "docker": "docker build -t eeelenbaas/openapi-typescript-codegen .",
         "generate-codacy": "npm run build && rimraf ./generated && node ./bin/index.js --input ./samples/spec/codacy-api.yaml --output ./generated --useUnionTypes --indent 2 --client axios"
     },
     "dependencies": {
@@ -59,17 +56,6 @@
         "handlebars": "^4.7.8"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "17.0.9",
-        "@angular/animations": "17.0.8",
-        "@angular/cli": "17.0.9",
-        "@angular/common": "17.0.8",
-        "@angular/compiler": "17.0.8",
-        "@angular/compiler-cli": "17.0.8",
-        "@angular/core": "17.0.8",
-        "@angular/forms": "17.0.8",
-        "@angular/platform-browser": "17.0.8",
-        "@angular/platform-browser-dynamic": "17.0.8",
-        "@angular/router": "17.0.8",
         "@babel/cli": "7.23.4",
         "@babel/core": "7.23.7",
         "@babel/preset-env": "7.23.8",
@@ -90,7 +76,6 @@
         "@typescript-eslint/parser": "6.19.0",
         "abort-controller": "3.0.0",
         "axios": "1.6.5",
-        "codecov": "3.8.3",
         "cross-spawn": "7.0.3",
         "eslint": "8.56.0",
         "eslint-config-prettier": "9.1.0",

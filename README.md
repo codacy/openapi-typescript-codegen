@@ -79,8 +79,6 @@ If you're from an enterprise looking for a fully managed SDK generation, please 
 [npm-image]: https://img.shields.io/npm/v/openapi-typescript-codegen.svg
 [license-url]: LICENSE
 [license-image]: http://img.shields.io/npm/l/openapi-typescript-codegen.svg
-[coverage-url]: https://codecov.io/gh/ferdikoomen/openapi-typescript-codegen
-[coverage-image]: https://img.shields.io/codecov/c/github/ferdikoomen/openapi-typescript-codegen.svg
 [downloads-url]: http://npm-stat.com/charts.html?package=openapi-typescript-codegen
 [downloads-image]: http://img.shields.io/npm/dm/openapi-typescript-codegen.svg
 [build-url]: https://circleci.com/gh/ferdikoomen/openapi-typescript-codegen/tree/master
