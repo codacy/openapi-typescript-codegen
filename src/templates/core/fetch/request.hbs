@@ -88,7 +88,11 @@ export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): C
 				resolve(result.body);
 			}
 		} catch (error) {
-			reject(error);
+			if (error instanceof Error && error.name === 'AbortError') {
+				return
+			} else {
+				reject(error)
+			}
 		}
 	});
 };

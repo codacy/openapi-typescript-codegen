@@ -1145,6 +1145,8 @@ definitions:
       - title
       - owner
       - gitHref
+      - headCommitSha
+      - commonAncestorCommitSha
     properties:
       id:
         type: integer
@@ -1171,6 +1173,12 @@ definitions:
         example: "Amazing pull request"
       owner:
         $ref: "#/definitions/PullRequestOwner"
+      headCommitSha:
+        type: string
+        example: "2957025d42e8daadf937d4044516f991d21deea4"
+      commonAncestorCommitSha:
+        type: string
+        example: "3357025d42e8daadf937d4044516f991d21deea4"
       originBranch:
         type: string
         example: "feat-branch"
@@ -1278,6 +1286,63 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/AnalysisResultReason"
+
+  PullRequestWithCoverageResponse:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: "#/definitions/PullRequestWithCoverage"
+
+  PullRequestWithCoverage:
+    type: object
+    required:
+      - pullRequest
+      - coverage
+    properties:
+      pullRequest:
+        $ref: "#/definitions/PullRequest"
+      coverage:
+        description: Coverage information for a pull request
+        $ref: "#/definitions/PullRequestCoverage"
+
+  PullRequestFilesCoverageResponse:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/FileDiffCoverage"
+
+  FileDiffCoverage:
+    type: object
+    required:
+      - fileName
+      - diffLineHits
+    properties:
+      fileName:
+        type: string
+      diff:
+        $ref: "#/definitions/DiffCoverage"
+      diffLineHits:
+        type: array
+        items:
+          $ref: "#/definitions/DiffLineHit"
+
+  DiffLineHit:
+    type: object
+    required:
+      - lineNumber
+      - hits
+    properties:
+      lineNumber:
+        type: string
+      hits:
+        type: integer
+        format: int64
 
   PullRequestWithAnalysis:
     type: object
@@ -1663,6 +1728,17 @@ definitions:
           $ref: '#/definitions/CommitDeltaIssue'
       pagination:
         $ref: '#/definitions/PaginationInfo'
+
+  IssueStatus:
+    type: string
+    description: "Issue resolution status"
+    example: "all"
+    x-ms-enum: &issueStatusEnumName
+      name: "IssueStatus"
+    enum: &issueStatusEnum
+      - all
+      - new
+      - fixed
 
   IgnoredIssue:
     type: object
@@ -2848,6 +2924,153 @@ definitions:
             description: Deprecated, use `commonAncestorCommit` instead
             $ref: "#/definitions/CoveragePullRequestCommitDetail"
 
+  PullRequestIssuesResponse:
+    type: object
+    description: List of issues added or fixed on a pull request
+    required:
+      - analyzed
+      - data
+    properties:
+      analyzed:
+        description: True if Codacy already analyzed the latest commit
+        type: boolean
+      data:
+        description: List of issues added or fixed on a pull request or an empty list if Codacy didn't analyze the latest commit yet.
+        type: array
+        items:
+          $ref: '#/definitions/CommitDeltaIssue'
+      pagination:
+        $ref: '#/definitions/PaginationInfo'
+
+  AnalysisStepExecutionMetrics:
+    type: object
+    description: Execution metrics for a step of the analysis process
+    required:
+      - title
+      - start
+      - end
+      - activeExecutionTime
+      - totalExecutionTime
+      - status
+    properties:
+      title:
+        type: string
+      start:
+        type: string
+        format: date-time
+        x-scala-type: java.time.Instant
+      end:
+        type: string
+        format: date-time
+        x-scala-type: java.time.Instant
+      activeExecutionTime:
+        type: integer
+        format: int64
+      totalExecutionTime:
+        type: integer
+        format: int64
+      stackTrace:
+        type: string
+      status:
+        type: string
+        enum:
+          - success
+          - error
+
+  LogsResponse:
+    type: object
+    description: Analysis logs response for a commit or pull request
+    required:
+      - data
+    properties:
+      data:
+        type: object
+        description: Analysis logs data for a commit or pull request
+        required:
+          - headCommitSha
+          - start
+          - end
+          - totalAnalysisTime
+          - steps
+        properties:
+          headCommitSha:
+            type: integer
+            format: int64
+          commonAncestorCommitSha:
+            type: integer
+            format: int64
+          start:
+            type: string
+            format: date-time
+            x-scala-type: java.time.Instant
+          end:
+            type: string
+            format: date-time
+            x-scala-type: java.time.Instant
+          totalAnalysisTime:
+            type: integer
+            format: int64
+          steps:
+            type: array
+            items:
+              $ref: '#/definitions/AnalysisStepExecutionMetrics'
+
+  ClonesResponse:
+    type: object
+    description: List of duplicate code blocks added or removed in a commit or pull request
+    required:
+      - data
+    properties:
+      data:
+        description: List of duplicate code blocks added or removed in a commit or pull request, or an empty list if Codacy hasn't analyzed the latest commit yet.
+        type: array
+        items:
+          $ref: '#/definitions/CommitFileClone'
+      pagination:
+        $ref: '#/definitions/PaginationInfo'
+
+  CommitFileClone:
+    type: object
+    description: A duplicated code block with references to duplicate instances
+    required:
+      - id
+      - status
+      - clones
+    properties:
+      id:
+        type: integer
+        format: int64
+      status:
+        $ref: '#/definitions/DeltaType'
+      clones:
+        type: array
+        items:
+          $ref: '#/definitions/CloneDuplicationBlock'
+
+  CloneDuplicationBlock:
+    type: object
+    required:
+      - path
+      - fileId
+      - fileDataId
+      - fromLine
+      - toLine
+    properties:
+      path:
+        type: string
+      fileId:
+        type: integer
+        format: int64
+      fileDataId:
+        type: integer
+        format: int64
+      fromLine:
+        type: integer
+        format: int64
+      toLine:
+        type: integer
+        format: int64
+
   DiffResponse:
     type: object
     description: |
@@ -3427,19 +3650,6 @@ definitions:
           $ref: '#/definitions/Person'
       pagination:
         $ref: '#/definitions/PaginationInfo'
-
-  PersonPermission:
-    type: object
-    required:
-      - email
-      - permission
-    properties:
-      email:
-        type: string
-        description: The email of the person
-        example: johnsmith@emailprovider.com
-      permission:
-        $ref: '#/definitions/UserRole'
 
   LeaveOrgProblem:
     type: object
@@ -4492,6 +4702,10 @@ definitions:
         type: string
         example: "PUL"
         description: Jira project key of the item's underlying issue
+      securityCategory:
+        type: string
+        example: Cryptography
+        description: The category of a security item identified by Codacy
 
   SrmPriorityMapping:
     type: object
@@ -4704,6 +4918,21 @@ definitions:
         items:
           $ref: '#/definitions/RepositorySummary'
 
+  SecurityCategoriesResponse:
+    description: List of security categories that have security issues.
+    type: object
+    required:
+      - pagination
+      - data
+    properties:
+      pagination:
+        $ref: '#/definitions/PaginationInfo'
+      data:
+        type: array
+        items:
+          type: string
+          example: Cryptography
+
   CommitDetails:
     description: Details of a commit.
     type: object
@@ -4740,6 +4969,17 @@ definitions:
       enabled:
         type: boolean
         description: Whether to enable or disable the pattern.
+        example: true
+
+  GitProviderAppPermissions:
+    type: object
+    description: Information about Codacy GitHub App repository permissions
+    required:
+      - contentPermission
+    properties:
+      contentPermission:
+        type: boolean
+        description: True if Codacy GitHub App has repository permissions for Contents, false otherwise.
         example: true
 
 responses:
@@ -4914,6 +5154,26 @@ parameters:
     x-example: "my-repository-name"
     x-ms-parameter-location: 'method'
 
+  issueStatusParam:
+    in: query
+    name: status
+    required: false
+    type: string
+    description: Issue status
+    enum: *issueStatusEnum
+    x-example: all
+    x-ms-parameter-location: 'method'
+    x-ms-enum: *issueStatusEnumName
+
+  onlyPotentialParam:
+    in: query
+    name: onlyPotential
+    description: If true, retrieves only potential issues
+    required: false
+    type: boolean
+    x-example: "true"
+    x-ms-parameter-location: 'method'
+
   onlyMembersParam:
     in: query
     name: onlyMembers
@@ -5072,6 +5332,13 @@ parameters:
     format: int32
     x-example: 738490
     x-ms-parameter-location: 'method'
+
+  commitUuidParam:
+    in: path
+    name: commitUuid
+    description: UUID or SHA identifier of the source commit
+    required: true
+    type: string
 
   codingStandardIdParam:
     in: path
@@ -5245,6 +5512,18 @@ parameters:
     required: false
     enum: *SrmStatusEnum
     x-example: "status=Overdue&status=OnTrack"
+    x-ms-parameter-location: 'method'
+
+  srmSecurityCategoryParam:
+    in: query
+    name: category
+    description: Security categories to filter by. Use `_other_` to search for issues that don't have a security category.
+    type: array
+    collectionFormat: multi
+    items:
+      type: string
+    required: false
+    x-example: "category=Cryptography&category=OutdatedDependencies"
     x-ms-parameter-location: 'method'
 
   resultDataIdParam:
@@ -5593,6 +5872,62 @@ paths:
         '500':
           $ref: '#/responses/InternalServerError'
 
+  /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}:
+    get:
+      tags:
+        - coverage
+      x-jvm-package: coverage
+      summary: Get pull request coverage information from a repository
+      description: |
+        **Note:** When applied to public repositories, this operation does not require authentication.
+      operationId: getRepositoryPullRequestCoverage
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - $ref: '#/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/PullRequestWithCoverageResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/files:
+    get:
+      tags:
+        - coverage
+      x-jvm-package: coverage
+      summary: Get pull request files coverage information from a repository
+      description: |
+        **Note:** When applied to public repositories, this operation does not require authentication.
+      operationId: getRepositoryPullRequestFilesCoverage
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - $ref: '#/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/PullRequestFilesCoverageResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
   /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/commits:
     get:
       tags:
@@ -5641,6 +5976,159 @@ paths:
           description: 'Successful operation'
           schema:
             $ref: '#/definitions/CoveragePullRequestResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/issues:
+    get:
+      tags:
+        - analysis
+      x-jvm-package: analysis
+      summary: List issues found in a pull request
+      description: Returns a list of issues found in a pull request. We can request either new or fixed issues.
+      operationId: listPullRequestIssues
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - $ref: '#/parameters/pullRequestNumberParam'
+        - $ref: '#/parameters/issueStatusParam'
+        - $ref: '#/parameters/onlyPotentialParam'
+        - $ref: '#/parameters/cursorParam'
+        - $ref: '#/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/PullRequestIssuesResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/clones:
+    get:
+      tags:
+        - analysis
+      x-jvm-package: analysis
+      summary: List duplicate code blocks found in a pull request
+      description: Returns a list of new or removed duplicate code blocks found in a pull request.
+      operationId: listPullRequestClones
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - $ref: '#/parameters/pullRequestNumberParam'
+        - $ref: '#/parameters/issueStatusParam'
+        - $ref: '#/parameters/onlyPotentialParam'
+        - $ref: '#/parameters/cursorParam'
+        - $ref: '#/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/ClonesResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/clones:
+    get:
+      tags:
+        - analysis
+      x-jvm-package: analysis
+      summary: List duplicate code blocks found in a commit
+      description: Returns a list of new or removed duplicate code blocks found in a commit.
+      operationId: listCommitClones
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - in: path
+          name: commitUuid
+          description: UUID or SHA identifier of the source commit
+          required: true
+          type: string
+          x-example: "2957025d42e8daadf937d4044516f991d21deea4"
+          x-ms-parameter-location: 'method'
+        - $ref: '#/parameters/issueStatusParam'
+        - $ref: '#/parameters/onlyPotentialParam'
+        - $ref: '#/parameters/cursorParam'
+        - $ref: '#/parameters/limitParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/ClonesResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/logs:
+    get:
+      tags:
+        - analysis
+      x-jvm-package: analysis
+      summary: Get analysis logs for a pull request
+      description: Returns the analysis logs for the specified pull request.
+      operationId: listPullRequestLogs
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - $ref: '#/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/LogsResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /analysis/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/commits/{commitUuid}/logs:
+    get:
+      tags:
+        - analysis
+      x-jvm-package: analysis
+      summary: Get analysis logs for a commit
+      description: Returns the analysis logs for the specified commit.
+      operationId: listCommitLogs
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - $ref: '#/parameters/commitUuidParam'
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/LogsResponse'
         '400':
           $ref: '#/responses/BadRequest'
         '401':
@@ -6085,6 +6573,8 @@ paths:
           $ref: '#/responses/Forbidden'
         '404':
           $ref: '#/responses/NotFound'
+        '409':
+          $ref: '#/responses/Conflict'
         '500':
           $ref: '#/responses/InternalServerError'
     patch:
@@ -6113,6 +6603,8 @@ paths:
           $ref: '#/responses/Forbidden'
         '404':
           $ref: '#/responses/NotFound'
+        '409':
+          $ref: '#/responses/Conflict'
         '500':
           $ref: '#/responses/InternalServerError'
 
@@ -6660,6 +7152,8 @@ paths:
           type: string
           x-example: "2957025d42e8daadf937d4044516f991d21deea4"
           x-ms-parameter-location: 'method'
+        - $ref: '#/parameters/issueStatusParam'
+        - $ref: '#/parameters/onlyPotentialParam'
         - $ref: '#/parameters/cursorParam'
         - $ref: '#/parameters/limitParam'
       responses:
@@ -7172,6 +7666,30 @@ paths:
           description: Remove people response
           schema:
             $ref: "#/definitions/RemovePeopleResponse"
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /organizations/{provider}/{remoteOrganizationName}/gitProviderAppPermissions:
+    get:
+      tags:
+        - app
+      x-jvm-package: organization
+      summary: Returns the status of the permissions required by the Codacy Git provider App installed on the organization
+      operationId: gitProviderAppPermissions
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+      responses:
+        '200':
+          description: Successful operation. i.e. we could determine permissions.
+          schema:
+            $ref: "#/definitions/GitProviderAppPermissions"
         '400':
           $ref: '#/responses/BadRequest'
         '401':
@@ -9032,6 +9550,7 @@ paths:
         - $ref: '#/parameters/repositoriesParam'
         - $ref: '#/parameters/srmStatusParam'
         - $ref: '#/parameters/srmPriorityParam'
+        - $ref: '#/parameters/srmSecurityCategoryParam'
       tags:
         - security
       x-jvm-package: security
@@ -9064,6 +9583,7 @@ paths:
           #if this becomes a problem this endpoint should be changed to a POST, so as the endpoints on SRM Service
         - $ref: '#/parameters/repositoriesParam'
         - $ref: '#/parameters/srmPriorityParam'
+        - $ref: '#/parameters/srmSecurityCategoryParam'
       tags:
         - security
       x-jvm-package: security
@@ -9191,8 +9711,34 @@ paths:
           $ref: '#/responses/NotFound'
         '500':
           $ref: '#/responses/InternalServerError'
-        '501':
-          $ref: '#/responses/NotImplemented'
+
+  /organizations/{provider}/{remoteOrganizationName}/security/categories:
+    get:
+      summary: Return a list of security subcategories that have security issues.
+      operationId: listSecurityCategories
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/cursorParam'
+        - $ref: '#/parameters/limitParam'
+      tags:
+        - security
+      x-jvm-package: security
+      responses:
+        '200':
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/SecurityCategoriesResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '404':
+          $ref: '#/responses/NotFound'
+        '500':
+          $ref: '#/responses/InternalServerError'
 
   /organizations/{provider}/{remoteOrganizationName}/integrations/jira:
     get:
@@ -9368,6 +9914,36 @@ paths:
       x-jvm-package: repository
       summary: Returns the human-readable Git diff of a pull request
       operationId: getPullRequestDiff
+      parameters:
+        - $ref: '#/parameters/providerParam'
+        - $ref: '#/parameters/remoteOrganizationNameParam'
+        - $ref: '#/parameters/repositoryNameParam'
+        - $ref: '#/parameters/pullRequestNumberParam'
+      responses:
+        '200':
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/DiffResponse'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '403':
+          $ref: '#/responses/Forbidden'
+        '404':
+          $ref: '#/responses/NotFound'
+        '422':
+          $ref: '#/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/responses/InternalServerError'
+
+  /coverage/organizations/{provider}/{remoteOrganizationName}/repositories/{repositoryName}/pull-requests/{pullRequestNumber}/diff:
+    get:
+      tags:
+        - coverage
+      x-jvm-package: coverage
+      summary: Returns the human-readable Git diff of a pull request
+      operationId: getPullRequestGitDiff
       parameters:
         - $ref: '#/parameters/providerParam'
         - $ref: '#/parameters/remoteOrganizationNameParam'
