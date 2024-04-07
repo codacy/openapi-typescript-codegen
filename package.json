@@ -58,16 +58,16 @@
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^17.3.8",
-        "@angular/animations": "17.3.0",
-        "@angular/cli": "17.3.0",
-        "@angular/common": "17.3.0",
-        "@angular/compiler": "17.3.0",
-        "@angular/compiler-cli": "17.3.0",
-        "@angular/core": "17.3.0",
-        "@angular/forms": "17.3.0",
-        "@angular/platform-browser": "17.3.0",
-        "@angular/platform-browser-dynamic": "17.3.0",
-        "@angular/router": "17.3.0",
+        "@angular/animations": "17.3.3",
+        "@angular/cli": "17.3.3",
+        "@angular/common": "17.3.3",
+        "@angular/compiler": "17.3.3",
+        "@angular/compiler-cli": "17.3.3",
+        "@angular/core": "17.3.3",
+        "@angular/forms": "17.3.3",
+        "@angular/platform-browser": "17.3.3",
+        "@angular/platform-browser-dynamic": "17.3.3",
+        "@angular/router": "17.3.3",
         "@babel/cli": "7.24.1",
         "@babel/core": "7.24.4",
         "@babel/preset-env": "7.24.4",
@@ -104,15 +104,15 @@
         "puppeteer": "^22.12.1",
         "qs": "6.12.0",
         "rimraf": "5.0.5",
-        "rollup": "4.13.0",
+        "rollup": "4.14.0",
         "rxjs": "7.8.1",
         "ts-node": "10.9.2",
         "tslib": "2.6.2",
-        "typescript": "5.4.2",
+        "typescript": "5.4.4",
         "zone.js": "0.14.4"
     },
     "overrides": {
         "node-fetch": "2.7.0",
-        "rollup": "4.13.0"
+        "rollup": "4.14.0"
     }
 }

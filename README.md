@@ -10,16 +10,17 @@ Forked from [openapi-typescript-codegen](https://github.com/ferdikoomen/openapi-
 > Node.js library that generates Typescript clients based on the OpenAPI specification.
 
 ## Why?
-- Frontend ❤️ OpenAPI, but we do not want to use JAVA codegen in our builds
-- Quick, lightweight, robust and framework-agnostic 🚀
-- Supports generation of TypeScript clients
-- Supports generations of Fetch, Node-Fetch, Axios, Angular and XHR http clients
-- Supports OpenAPI specification v2.0 and v3.0
-- Supports JSON and YAML files for input
-- Supports generation through CLI, Node.js and NPX
-- Supports tsc and @babel/plugin-transform-typescript
-- Supports aborting of requests (cancelable promise pattern)
-- Supports external references using [json-schema-ref-parser](https://github.com/APIDevTools/json-schema-ref-parser/)
+
+-   Frontend ❤️ OpenAPI, but we do not want to use JAVA codegen in our builds
+-   Quick, lightweight, robust and framework-agnostic 🚀
+-   Supports generation of TypeScript clients
+-   Supports generations of Fetch, Node-Fetch, Axios, Angular and XHR http clients
+-   Supports OpenAPI specification v2.0 and v3.0
+-   Supports JSON and YAML files for input
+-   Supports generation through CLI, Node.js and NPX
+-   Supports tsc and @babel/plugin-transform-typescript
+-   Supports aborting of requests (cancelable promise pattern)
+-   Supports external references using [json-schema-ref-parser](https://github.com/APIDevTools/json-schema-ref-parser/)
 
 ## Install
 
@@ -59,11 +60,9 @@ $ openapi --help
 
 ## Documentation
 
-
 The main documentation can be found in the [openapi-typescript-codegen/wiki](https://github.com/ferdikoomen/openapi-typescript-codegen/wiki)
 
 ## Sponsors
-
 
 If you or your company use the OpenAPI Typescript Codegen, please consider supporting me. By sponsoring I can free up time to give this project some love! Details can be found here: https://github.com/sponsors/ferdikoomen
 
