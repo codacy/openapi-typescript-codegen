@@ -24,14 +24,9 @@ jobs:
             node -v
             npm -v
       - run:
-          name: Clear npm cache
-          command: |
-            npm cache clean --force
-      - run:
           name: Install dependencies and generate
           command: |
-            ls -la
-            PUPPETEER_SKIP_DOWNLOAD=true npm install --unsafe-perm=true --verbose
+            PUPPETEER_SKIP_DOWNLOAD=true npm install --unsafe-perm=true
       - run:
           name: Build library
           command: |
