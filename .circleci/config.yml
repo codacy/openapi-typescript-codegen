@@ -31,7 +31,7 @@ jobs:
           name: Install dependencies and generate
           command: |
             ls -la
-            npm install --verbose
+            PUPPETEER_SKIP_DOWNLOAD=true npm install --unsafe-perm=true --verbose
       - run:
           name: Build library
           command: |
