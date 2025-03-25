@@ -10,11 +10,10 @@ references:
         only:
           - master
 
-
 jobs:
   build_package:
     docker:
-      - image: cimg/node:20.8
+      - image: cimg/node:20.1.0
     working_directory: ~/workdir
     steps:
       - attach_workspace:
@@ -44,7 +43,7 @@ jobs:
 
   publish_packages:
     docker:
-      - image: cimg/node:20.8
+      - image: cimg/node:20.1.0
     working_directory: ~/workdir
     steps:
       - attach_workspace:
