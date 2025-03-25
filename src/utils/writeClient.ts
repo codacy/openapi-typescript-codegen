@@ -40,6 +40,7 @@ export const writeClient = async (
     httpClient: HttpClient,
     useOptions: boolean,
     splitParameters: boolean,
+    importExtension: boolean,
     useUnionTypes: boolean,
     exportCore: boolean,
     exportServices: boolean,
@@ -64,7 +65,16 @@ export const writeClient = async (
     if (exportCore) {
         await rmdir(outputPathCore);
         await mkdir(outputPathCore);
-        await writeClientCore(client, templates, outputPathCore, httpClient, indent, clientName, request);
+        await writeClientCore(
+            client,
+            templates,
+            outputPathCore,
+            httpClient,
+            indent,
+            clientName,
+            request,
+            importExtension
+        );
     }
 
     if (exportServices) {
@@ -78,6 +88,7 @@ export const writeClient = async (
             useUnionTypes,
             useOptions,
             splitParameters,
+            importExtension,
             indent,
             postfixServices,
             clientName
@@ -93,7 +104,15 @@ export const writeClient = async (
     if (exportModels) {
         await rmdir(outputPathModels);
         await mkdir(outputPathModels);
-        await writeClientModels(client.models, templates, outputPathModels, httpClient, useUnionTypes, indent);
+        await writeClientModels(
+            client.models,
+            templates,
+            outputPathModels,
+            httpClient,
+            useUnionTypes,
+            importExtension,
+            indent
+        );
     }
 
     if (isDefined(clientName)) {
@@ -108,6 +127,7 @@ export const writeClient = async (
             templates,
             outputPath,
             useUnionTypes,
+            importExtension,
             exportCore,
             exportServices,
             exportModels,

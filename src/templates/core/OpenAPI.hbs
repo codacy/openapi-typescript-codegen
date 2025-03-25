@@ -1,6 +1,6 @@
 {{>header}}
 
-import type { ApiRequestOptions } from './ApiRequestOptions';
+import type { ApiRequestOptions } from './ApiRequestOptions{{#if @root.importExtension}}.js{{/if}}';
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T | undefined>;
 type Headers = Record<string, string>;

@@ -5,17 +5,17 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import type { Observable } from 'rxjs';
 
-import type { ApiRequestOptions } from './ApiRequestOptions';
+import type { ApiRequestOptions } from './ApiRequestOptions{{#if @root.importExtension}}.js{{/if}}';
 import { BaseHttpRequest } from './BaseHttpRequest';
 import type { OpenAPIConfig } from './OpenAPI';
 import { OpenAPI } from './OpenAPI';
 import { request as __request } from './request';
 {{else}}
-import type { ApiRequestOptions } from './ApiRequestOptions';
-import { BaseHttpRequest } from './BaseHttpRequest';
-import type { CancelablePromise } from './CancelablePromise';
-import type { OpenAPIConfig } from './OpenAPI';
-import { request as __request } from './request';
+import type { ApiRequestOptions } from './ApiRequestOptions{{#if @root.importExtension}}.js{{/if}}';
+import { BaseHttpRequest } from './BaseHttpRequest{{#if @root.importExtension}}.js{{/if}}';
+import type { CancelablePromise } from './CancelablePromise{{#if @root.importExtension}}.js{{/if}}';
+import type { OpenAPIConfig } from './OpenAPI{{#if @root.importExtension}}.js{{/if}}';
+import { request as __request } from './request{{#if @root.importExtension}}.js{{/if}}';
 {{/equals}}
 
 {{#equals @root.httpClient 'angular'}}

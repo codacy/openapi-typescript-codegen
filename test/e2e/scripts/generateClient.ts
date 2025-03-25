@@ -6,6 +6,7 @@ export const generateClient = async (
     client: 'fetch' | 'xhr' | 'node' | 'axios' | 'angular',
     useOptions: boolean = false,
     splitParameters: boolean = false,
+    importExtension: boolean = false,
     useUnionTypes: boolean = false,
     clientName?: string
 ) => {
@@ -15,6 +16,7 @@ export const generateClient = async (
         httpClient: client,
         useOptions,
         splitParameters,
+        importExtension,
         useUnionTypes,
         clientName,
     });

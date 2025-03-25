@@ -13,22 +13,22 @@ import type { Observable } from 'rxjs';
 {{/equals}}
 {{#if imports}}
 {{#each imports}}
-import type { {{{this}}} } from '../models/{{{this}}}';
+import type { {{{this}}} } from '../models/{{{this}}}{{#if @root.importExtension}}.js{{/if}}';
 {{/each}}
 
 {{/if}}
 {{#notEquals @root.httpClient 'angular'}}
-import type { CancelablePromise } from '../core/CancelablePromise';
+import type { CancelablePromise } from '../core/CancelablePromise{{#if @root.importExtension}}.js{{/if}}';
 {{/notEquals}}
 {{#if @root.exportClient}}
 {{#equals @root.httpClient 'angular'}}
-import { BaseHttpRequest } from '../core/BaseHttpRequest';
+import { BaseHttpRequest } from '../core/BaseHttpRequest{{#if @root.importExtension}}.js{{/if}}';
 {{else}}
-import type { BaseHttpRequest } from '../core/BaseHttpRequest';
+import type { BaseHttpRequest } from '../core/BaseHttpRequest{{#if @root.importExtension}}.js{{/if}}';
 {{/equals}}
 {{else}}
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import { OpenAPI } from '../core/OpenAPI{{#if @root.importExtension}}.js{{/if}}';
+import { request as __request } from '../core/request{{#if @root.importExtension}}.js{{/if}}';
 {{/if}}
 
 {{#equals @root.httpClient 'angular'}}

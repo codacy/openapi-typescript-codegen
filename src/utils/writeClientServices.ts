@@ -29,6 +29,7 @@ export const writeClientServices = async (
     useUnionTypes: boolean,
     useOptions: boolean,
     splitParameters: boolean,
+    importExtension: boolean,
     indent: Indent,
     postfix: string,
     clientName?: string
@@ -41,6 +42,7 @@ export const writeClientServices = async (
             useUnionTypes,
             useOptions,
             splitParameters,
+            importExtension,
             postfix,
             exportClient: isDefined(clientName),
         });
