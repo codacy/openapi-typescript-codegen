@@ -24,9 +24,14 @@ jobs:
             node -v
             npm -v
       - run:
+          name: Clear npm cache
+          command: |
+            npm cache clean --force
+      - run:
           name: Install dependencies and generate
           command: |
-            npm install
+            ls -la
+            npm install --no-progress
       - run:
           name: Build library
           command: |
