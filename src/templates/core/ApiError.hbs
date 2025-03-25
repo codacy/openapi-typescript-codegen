@@ -1,7 +1,7 @@
 {{>header}}
 
-import type { ApiRequestOptions } from './ApiRequestOptions';
-import type { ApiResult } from './ApiResult';
+import type { ApiRequestOptions } from './ApiRequestOptions{{#if @root.importExtension}}.js{{/if}}';
+import type { ApiResult } from './ApiResult{{#if @root.importExtension}}.js{{/if}}';
 
 export class ApiError extends Error {
 	public readonly url: string;

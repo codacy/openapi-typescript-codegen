@@ -16,6 +16,7 @@ const params = program
     .option('--name <value>', 'Custom client class name')
     .option('--useOptions', 'Use options instead of arguments')
     .option('--splitParameters', 'User arguments for path parameters and options for query parameters')
+    .option('--importExtension', 'Add .js extension to import statements')
     .option('--useUnionTypes', 'Use union types instead of enums')
     .option('--exportCore <value>', 'Write core files to disk', true)
     .option('--exportServices <value>', 'Write services to disk', true)
@@ -38,6 +39,7 @@ if (OpenAPI) {
         clientName: params.name,
         useOptions: params.useOptions,
         splitParameters: params.splitParameters,
+        importExtension: params.importExtension,
         useUnionTypes: params.useUnionTypes,
         exportCore: JSON.parse(params.exportCore) === true,
         exportServices: JSON.parse(params.exportServices) === true,

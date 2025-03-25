@@ -1,30 +1,30 @@
 {{>header}}
 
 {{#if @root.exportClient}}
-export { {{{clientName}}} } from './{{{clientName}}}';
+export { {{{clientName}}} } from './{{{clientName}}}{{#if @root.importExtension}}.js{{/if}}';
 
 {{/if}}
 {{#if @root.exportCore}}
-export { ApiError as OpenAPIError } from './core/ApiError';
+export { ApiError as OpenAPIError } from './core/ApiError{{#if @root.importExtension}}.js{{/if}}';
 {{#if @root.exportClient}}
-export { BaseHttpRequest } from './core/BaseHttpRequest';
+export { BaseHttpRequest } from './core/BaseHttpRequest{{#if @root.importExtension}}.js{{/if}}';
 {{/if}}
-export { CancelablePromise, CancelError } from './core/CancelablePromise';
-export { OpenAPI } from './core/OpenAPI';
-export type { OpenAPIConfig } from './core/OpenAPI';
+export { CancelablePromise, CancelError } from './core/CancelablePromise{{#if @root.importExtension}}.js{{/if}}';
+export { OpenAPI } from './core/OpenAPI{{#if @root.importExtension}}.js{{/if}}';
+export type { OpenAPIConfig } from './core/OpenAPI{{#if @root.importExtension}}.js{{/if}}';
 {{/if}}
 {{#if @root.exportModels}}
 {{#if models}}
 
 {{#each models}}
 {{#if @root.useUnionTypes}}
-export type { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}';
+export type { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}{{#if @root.importExtension}}.js{{/if}}';
 {{else if enum}}
-export { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}';
+export { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}{{#if @root.importExtension}}.js{{/if}}';
 {{else if enums}}
-export { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}';
+export { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}{{#if @root.importExtension}}.js{{/if}}';
 {{else}}
-export type { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}';
+export type { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfixModels}}}{{/if}} } from './models/{{{name}}}{{#if @root.importExtension}}.js{{/if}}';
 {{/if}}
 {{/each}}
 {{/if}}
@@ -33,7 +33,7 @@ export type { {{{name}}}{{#if @root.postfixModels}} as {{{name}}}{{{@root.postfi
 {{#if models}}
 
 {{#each models}}
-export { ${{{name}}} } from './schemas/${{{name}}}';
+export { ${{{name}}} } from './schemas/${{{name}}}{{#if @root.importExtension}}.js{{/if}}';
 {{/each}}
 {{/if}}
 {{/if}}
@@ -41,7 +41,7 @@ export { ${{{name}}} } from './schemas/${{{name}}}';
 {{#if services}}
 
 {{#each services}}
-export { {{{name}}}{{{@root.postfixServices}}} } from './services/{{{name}}}{{{@root.postfixServices}}}';
+export { {{{name}}}{{{@root.postfixServices}}} } from './services/{{{name}}}{{{@root.postfixServices}}}{{#if @root.importExtension}}.js{{/if}}';
 {{/each}}
 {{/if}}
 {{/if}}

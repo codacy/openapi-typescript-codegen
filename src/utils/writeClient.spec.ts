@@ -44,6 +44,7 @@ describe('writeClient', () => {
             false,
             false,
             false,
+            false,
             true,
             true,
             true,

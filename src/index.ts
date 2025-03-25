@@ -19,6 +19,7 @@ export type Options = {
     clientName?: string;
     useOptions?: boolean;
     splitParameters?: boolean;
+    importExtension?: boolean;
     useUnionTypes?: boolean;
     exportCore?: boolean;
     exportServices?: boolean;
@@ -41,6 +42,7 @@ export type Options = {
  * @param clientName Custom client class name
  * @param useOptions Use options or arguments functions
  * @param splitParameters User arguments for path parameters and options for query parameters
+ * @param importExtension Add .js extension to import statements
  * @param useUnionTypes Use union types instead of enums
  * @param exportCore Generate core client classes
  * @param exportServices Generate services
@@ -59,6 +61,7 @@ export const generate = async ({
     clientName,
     useOptions = false,
     splitParameters = false,
+    importExtension = false,
     useUnionTypes = false,
     exportCore = true,
     exportServices = true,
@@ -90,6 +93,7 @@ export const generate = async ({
                 httpClient,
                 useOptions,
                 splitParameters,
+                importExtension,
                 useUnionTypes,
                 exportCore,
                 exportServices,
@@ -115,6 +119,7 @@ export const generate = async ({
                 httpClient,
                 useOptions,
                 splitParameters,
+                importExtension,
                 useUnionTypes,
                 exportCore,
                 exportServices,

@@ -1,11 +1,11 @@
 {{>header}}
 
-import { ApiError } from './ApiError';
-import type { ApiRequestOptions } from './ApiRequestOptions';
-import type { ApiResult } from './ApiResult';
-import { CancelablePromise } from './CancelablePromise';
-import type { OnCancel } from './CancelablePromise';
-import type { OpenAPIConfig } from './OpenAPI';
+import { ApiError } from './ApiError{{#if @root.importExtension}}.js{{/if}}';
+import type { ApiRequestOptions } from './ApiRequestOptions{{#if @root.importExtension}}.js{{/if}}';
+import type { ApiResult } from './ApiResult{{#if @root.importExtension}}.js{{/if}}';
+import { CancelablePromise } from './CancelablePromise{{#if @root.importExtension}}.js{{/if}}';
+import type { OnCancel } from './CancelablePromise{{#if @root.importExtension}}.js{{/if}}';
+import type { OpenAPIConfig } from './OpenAPI{{#if @root.importExtension}}.js{{/if}}';
 
 {{>functions/isDefined}}
 

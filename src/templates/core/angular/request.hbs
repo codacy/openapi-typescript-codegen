@@ -7,7 +7,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import type { Observable } from 'rxjs';
 
 import { ApiError } from './ApiError';
-import type { ApiRequestOptions } from './ApiRequestOptions';
+import type { ApiRequestOptions } from './ApiRequestOptions{{#if @root.importExtension}}.js{{/if}}';
 import type { ApiResult } from './ApiResult';
 import type { OpenAPIConfig } from './OpenAPI';
 

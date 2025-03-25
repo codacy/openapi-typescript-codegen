@@ -47,7 +47,8 @@
         "eslint:fix": "eslint . --fix",
         "prepare": "npm run clean && npm run release",
         "generate-spa-codacy": "npm run build && rimraf ./generated && node ./bin/index.js --input ./samples/spec/codacy-api.yaml --output ./generated --useUnionTypes --indent 2 --client fetch --splitParameters",
-        "generate-ide-codacy": "npm run build && rimraf ./generated && node ./bin/index.js --input ./samples/spec/codacy-api.yaml --output ./generated --useUnionTypes --indent 2 --client axios"
+        "generate-ide-codacy": "npm run build && rimraf ./generated && node ./bin/index.js --input ./samples/spec/codacy-api.yaml --output ./generated --useUnionTypes --indent 2 --client axios",
+        "generate-mcp-codacy": "npm run build && rimraf ./generated && node ./bin/index.js --input ./samples/spec/codacy-api.yaml --output ./generated --useUnionTypes --indent 2 --client fetch --importExtension"
     },
     "dependencies": {
         "@apidevtools/json-schema-ref-parser": "^10.1.0",
