@@ -560,11 +560,7 @@ export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): C
                 resolve(result.body);
             }
         } catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') {
-                return
-            } else {
-                reject(error)
-            }
+            reject(error);
         }
     });
 };
@@ -3687,11 +3683,7 @@ export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): C
                 resolve(result.body);
             }
         } catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') {
-                return
-            } else {
-                reject(error)
-            }
+            reject(error);
         }
     });
 };
